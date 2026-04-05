@@ -1,0 +1,223 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Inter as the primary UI font */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-inter);
+  
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+
+  /* Custom Spacing & Transitions */
+  --transition-motion: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Base Light Theme - Fallback if used */
+:root {
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.1 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.1 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.1 0 0);
+  --primary: oklch(0.1 0 0);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.4 0 0);
+  --accent: oklch(0.95 0 0);
+  --accent-foreground: oklch(0.1 0 0);
+  --destructive: oklch(0.6 0.2 20);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.9 0 0);
+  --ring: oklch(0.1 0 0);
+  --radius: 0.75rem;
+}
+
+/* Premium Enterprise Dark Theme (Modal.com Inspired) */
+.dark {
+  color-scheme: dark; /* Tells browser to render system UI (scrollbars, inputs) in dark mode */
+
+  /* Pitch dark backgrounds */
+  --background: oklch(0.11 0 0);
+  --foreground: oklch(1 0 0);   /* Pure white — maximum contrast on dark */
+  
+  /* Slightly elevated surfaces */
+  --card: oklch(0.17 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.15 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  
+  /* High contrast primary actions */
+  --primary: oklch(0.985 0 0); /* Pure White Action Items */
+  --primary-foreground: oklch(0.12 0 0); 
+  
+  /* Prominent secondary colors */
+  --secondary: oklch(0.22 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  
+  /* Muted text — slightly brighter for better dark-bg readability */
+  --muted: oklch(0.20 0 0);
+  --muted-foreground: oklch(0.78 0 0); /* was 0.75 — bumped for WCAG AA on dark */
+  
+  --accent: oklch(0.24 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  
+  --destructive: oklch(0.65 0.2 25);
+  
+  /* Very subtle structural borders (barely visible) */
+  --border: oklch(1 0 0 / 6%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.985 0 0 / 50%);
+  
+  /* Custom shadows and glow variables for utilities */
+  --glow-color: oklch(1 0 0 / 5%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+    /* Inter stylistic alternates: disambiguation & cleaner punctuation */
+    font-feature-settings: "cv01", "cv03", "cv04", "cv11";
+    font-variation-settings: normal;
+    /* Standard antialiasing for dark backgrounds (avoids subpixel colour fringing) */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevents iOS from inflating text in landscape */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    /* Prevent browser from synthesising bold/italic variants */
+    font-synthesis: none;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-size: 1rem;       /* 16px base */
+    line-height: 1.625;    /* 26px — generous for readability */
+    font-weight: 400;
+    letter-spacing: -0.003em; /* Inter reads slightly tighter than system fonts */
+  }
+
+  /* Global link behaviour */
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* ── Typography scale ────────────────────────────────────────────
+     Designed for Inter. Weights and tracking tuned for SaaS/enterprise UI.
+  ── */
+
+  h1 {
+    /* Display — hero headlines */
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  h2 {
+    /* Section titles */
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  h3 {
+    /* Card / feature headers */
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  h4 {
+    /* Sub-section labels */
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  h5, h6 {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+  }
+
+  /* Monospace — code, data, labels */
+  code, pre, kbd, samp {
+    font-family: var(--font-mono), ui-monospace, "Cascadia Code", Menlo, monospace;
+    font-feature-settings: "liga" 0;
+  }
+}
+
+@layer utilities {
+  /* Modal.com Style Glass Panel overlay */
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/5 shadow-2xl;
+  }
+  
+  /* Glow border utility */
+  .glow-border {
+    position: relative;
+  }
+  .glow-border::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 1px var(--glow-color);
+    pointer-events: none;
+    transition: box-shadow var(--transition-motion);
+  }
+  .glow-border:hover::after {
+    box-shadow: 0 0 20px 2px var(--glow-color);
+  }
+
+  /* Typography utilities */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to bottom, #ffffff 20%, rgba(255,255,255,0.45) 100%);
+  }
+
+  .section-label {
+    @apply text-[0.6875rem] font-semibold tracking-[0.18em] uppercase text-white/30 mb-4 block;
+  }
+
+  /* Smooth hairline separators */
+  .hairline {
+    @apply block h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
+  }
+}
