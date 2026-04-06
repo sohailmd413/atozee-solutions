@@ -40,6 +40,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} dark antialiased h-full`}
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-white/20 selection:text-white">
         <Navbar />

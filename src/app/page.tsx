@@ -1,5 +1,4 @@
 import { HeroSection } from "@/components/sections/HeroSection";
-import { TrustStrip } from "@/components/sections/TrustStrip";
 import { WhyAtozeeSection } from "@/components/sections/WhyAtozeeSection";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { HowWeWorkSection } from "@/components/sections/HowWeWorkSection";
@@ -12,7 +11,6 @@ export default function Home() {
   return (
     <div className="flex flex-col flex-grow">
       <HeroSection />
-      <TrustStrip />
       <WhyAtozeeSection />
       <ServicesGrid />
       <HowWeWorkSection />
