@@ -1,8 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { ArrowRight, Rocket, Palette, Globe, Smartphone, Server, BarChart3 } from "lucide-react";
 import Link from "next/link";
+import { fadeUp, staggerContainer, scaleIn, viewportConfig, hoverScale } from "@/lib/animations";
 
 const services = [
   {
@@ -39,46 +41,72 @@ const services = [
 
 export function ServicesGrid() {
   return (
-    <section className="py-28 md:py-36 relative">
+    <motion.section 
+      className="py-28 md:py-36 relative"
+      initial="hidden"
+      whileInView="show"
+      viewport={viewportConfig}
+    >
       {/* Very subtle section background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.012] via-transparent to-transparent pointer-events-none" />
 
       <Container className="relative z-10">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+        <motion.div 
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportConfig}
+        >
           <div>
-            <span className="section-label">Our Capabilities</span>
-            <h2 className="text-[clamp(2rem,4.5vw,3.25rem)] font-bold tracking-tighter text-foreground max-w-[22ch] leading-tight">
+            <motion.span className="section-label block mb-4" variants={fadeUp}>
+              Our Capabilities
+            </motion.span>
+            <motion.h2 
+              className="text-[clamp(2rem,4.5vw,3.25rem)] font-bold tracking-tighter text-foreground max-w-[22ch] leading-tight"
+              variants={fadeUp}
+            >
               End-to-end digital transformation
-            </h2>
+            </motion.h2>
           </div>
-          <Link
-            href="/services"
-            className="hidden md:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0"
-          >
-            All services <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+          <motion.div variants={fadeUp}>
+            <Link
+              href="/services"
+              className="hidden md:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0"
+            >
+              All services <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        </motion.div>
 
         {/* Services grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportConfig}
+        >
           {services.map((service, i) => {
             const Icon = service.icon;
             return (
-              <div
+              <motion.div
                 key={i}
                 className="group bg-background/80 p-8 md:p-10 hover:bg-white/[0.03] transition-colors duration-300 cursor-default"
+                variants={scaleIn}
+                whileHover={hoverScale}
               >
                 <div className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center justify-center mb-6 text-foreground/70 group-hover:text-foreground transition-colors">
                   <Icon className="w-4.5 h-4.5" strokeWidth={1.5} />
                 </div>
                 <h3 className="font-semibold text-foreground text-[1rem] mb-2 tracking-tight">{service.title}</h3>
                 <p className="text-[0.875rem] text-muted-foreground leading-relaxed">{service.description}</p>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </Container>
-    </section>
+    </motion.section>
   );
 }
