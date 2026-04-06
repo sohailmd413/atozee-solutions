@@ -1,9 +1,125 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { ArrowRight, ChevronRight } from "lucide-react";
+import * as React from "react";
+
+// ─── AI Company Logos Data ─────────────────────────────────────────
+export const aiLogos = [
+  { name: "Meta", src: "/logos/meta.svg" },
+  { name: "OpenAI", src: "/logos/openai.svg" },
+  { name: "Anthropic", src: "/logos/anthropic.svg" },
+  { name: "Mistral AI", src: "/logos/mistral.svg" },
+  { name: "Hugging Face", src: "/logos/huggingface.svg" },
+  { name: "Perplexity", src: "/logos/perplexity.svg" },
+  { name: "ElevenLabs", src: "/logos/elevenlabs.svg" },
+  { name: "Suno", src: "/logos/suno.svg" },
+  { name: "Tailscale", src: "/logos/tailscale.svg" },
+  { name: "Snapdragon", src: "/logos/snapdragon.svg" },
+  { name: "MasterCard", src: "/logos/mastercard.svg" },
+  { name: "Qwiklabs", src: "/logos/qwiklabs.svg" },
+  { name: "Pinterest", src: "/logos/pinterest.svg" },
+  { name: "Substack", src: "/logos/substack.svg" },
+  { name: "X", src: "/logos/x.svg" },
+  { name: "MariaDB", src: "/logos/mariadb.svg" },
+  { name: "Emirates", src: "/logos/emirates.svg" },
+  { name: "Apple", src: "/logos/apple.svg" },
+  { name: "Jenkins", src: "/logos/jenkins.svg" },
+  { name: "GitLab", src: "/logos/gitlab.svg" },
+];
+
+// ─── Typewriter Animation ──────────────────────────────────────────
+function TypewriterText({ texts, className }: { texts: string[]; className?: string }) {
+  const [textIndex, setTextIndex] = React.useState(0);
+  const [displayText, setDisplayText] = React.useState("");
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
+  React.useEffect(() => {
+    const fullText = texts[textIndex];
+
+    const handleTyping = () => {
+      if (isDeleting) {
+        setDisplayText((prev) => prev.substring(0, prev.length - 1));
+      } else {
+        setDisplayText((prev) => fullText.substring(0, prev.length + 1));
+      }
+    };
+
+    const typingSpeed = isDeleting ? 50 : 100;
+    const typeInterval = setInterval(handleTyping, typingSpeed);
+
+    if (!isDeleting && displayText === fullText) {
+      setTimeout(() => setIsDeleting(true), 2500);
+    } else if (isDeleting && displayText === "") {
+      setIsDeleting(false);
+      setTextIndex((prev) => (prev + 1) % texts.length);
+    }
+
+    return () => clearInterval(typeInterval);
+  }, [displayText, isDeleting, textIndex, texts]);
+
+  return (
+    <span className={className}>
+      {displayText}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+        className="inline-block w-[3px] h-[0.85em] bg-white/60 ml-1 align-middle"
+      />
+    </span>
+  );
+}
+
+// ─── Floating Paths Background ───────────────────────────────────────────
+function FloatingPaths({ position }: { position: number }) {
+  const paths = Array.from({ length: 36 }, (_, i) => ({
+    id: i,
+    d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
+      380 - i * 5 * position
+    } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${
+      152 - i * 5 * position
+    } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
+      684 - i * 5 * position
+    } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
+    color: `rgba(15,23,42,${0.1 + i * 0.03})`,
+    width: 0.5 + i * 0.03,
+  }));
+
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      <svg
+        className="w-full h-full text-slate-950 dark:text-white"
+        viewBox="0 0 696 316"
+        fill="none"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <title>Hero Background</title>
+        {paths.map((path) => (
+          <motion.path
+            key={path.id}
+            d={path.d}
+            stroke="currentColor"
+            strokeWidth={path.width}
+            strokeOpacity={0.1 + path.id * 0.03}
+            initial={{ pathLength: 0.3, opacity: 0.6 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0.3, 0.6, 0.3],
+              pathOffset: [0, 1, 0],
+            }}
+            transition={{
+              duration: 20 + Math.random() * 10,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
 
 // ─── Motion variants ─────────────────────────────────────────
 const container = {
@@ -19,285 +135,18 @@ const fadeUp = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
-
-// ─── Glowing Glass Orb Component ────────────────────────────
-function GlowingOrb() {
-  return (
-    <motion.div
-      className="relative"
-      animate={{
-        y: [-15, 15, -15],
-      }}
-      transition={{
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-    >
-      {/* Core glow */}
-      <motion.div
-        className="absolute inset-0"
-        animate={{
-          scale: [1, 1.08, 1],
-          opacity: [0.4, 0.6, 0.4],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        style={{
-          width: "320px",
-          height: "320px",
-          borderRadius: "9999px",
-          background: "radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%)",
-          filter: "blur(40px)",
-          x: "-50%",
-          left: "50%",
-        }}
-      />
-
-      {/* Main translucent shell */}
-      <motion.div
-        className="relative"
-        animate={{
-          rotate: [0, 360],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        style={{
-          width: "320px",
-          height: "320px",
-        }}
-      >
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            backdropFilter: "blur(20px)",
-            boxShadow: "inset 0 0 80px rgba(255,255,255,0.1), inset 0 0 40px rgba(255,255,255,0.05), 0 0 60px rgba(255,255,255,0.08)",
-          }}
-        />
-        {/* Inner ring */}
-        <motion.div
-          className="absolute rounded-full"
-          style={{
-            width: "200px",
-            height: "200px",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%)",
-            filter: "blur(15px)",
-          }}
-          animate={{
-            scale: [0.9, 1.1, 0.9],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-        />
-        {/* Center glow */}
-        <motion.div
-          className="absolute rounded-full"
-          style={{
-            width: "120px",
-            height: "120px",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            background: "radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 40%, transparent 70%)",
-            filter: "blur(20px)",
-          }}
-          animate={{
-            opacity: [0.6, 0.9, 0.6],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-      </motion.div>
-
-      {/* Floating particles */}
-      {[
-        { size: 4, x: -180, y: -120, duration: 7 },
-        { size: 3, x: 160, y: -80, duration: 6 },
-        { size: 5, x: -140, y: 100, duration: 8 },
-        { size: 3, x: 180, y: 120, duration: 7.5 },
-        { size: 4, x: -80, y: -160, duration: 6.5 },
-      ].map((particle, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            x: particle.x,
-            y: particle.y,
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            background: "rgba(255,255,255,0.7)",
-            boxShadow: "0 0 12px 2px rgba(255,255,255,0.5)",
-          }}
-          animate={{
-            y: [particle.y, particle.y - 30, particle.y],
-            x: [particle.x, particle.x + 20, particle.x],
-            opacity: [0.4, 0.8, 0.4],
-          }}
-          transition={{
-            duration: particle.duration,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.3,
-          }}
-        />
-      ))}
-    </motion.div>
-  );
-}
-
-// ─── Enhanced Hero Visual Composition ───────────────────────
-function HeroVisual() {
-  return (
-    <div className="relative w-full flex justify-center items-center h-[500px] md:h-[600px] lg:h-[700px]">
-      {/* Massive radial bloom */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          width: "800px",
-          height: "800px",
-          borderRadius: "50%",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)",
-          filter: "blur(80px)",
-        }}
-        animate={{
-          scale: [1, 1.15, 1],
-          opacity: [0.6, 0.8, 0.6],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* Secondary glow layer */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          width: "500px",
-          height: "500px",
-          borderRadius: "50%",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 60%)",
-          filter: "blur(60px)",
-        }}
-        animate={{
-          scale: [1.1, 0.95, 1.1],
-          opacity: [0.4, 0.6, 0.4],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-      />
-
-      {/* Orbiting rings */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          width: "450px",
-          height: "450px",
-          border: "1px solid rgba(255,255,255,0.06)",
-          borderRadius: "50%",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: -2,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.8)",
-            boxShadow: "0 0 20px 4px rgba(255,255,255,0.4)",
-          }}
-        />
-      </motion.div>
-
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          width: "380px",
-          height: "380px",
-          border: "1px dashed rgba(255,255,255,0.04)",
-          borderRadius: "50%",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-        animate={{ rotate: -360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            bottom: -2,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 6,
-            height: 6,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.6)",
-            boxShadow: "0 0 15px 3px rgba(255,255,255,0.3)",
-          }}
-        />
-      </motion.div>
-
-      {/* Main glowing orb */}
-      <div className="relative z-10">
-        <GlowingOrb />
-      </div>
-    </div>
-  );
-}
 
 // ─── Main HeroSection export ─────────────────────────────────
 export function HeroSection() {
   return (
     <section className="relative flex flex-col items-center overflow-hidden min-h-[calc(100vh-4.75rem)]">
-      {/* Background visual layer - more visible now */}
+      {/* Background paths animation */}
       <div className="absolute inset-0 z-0">
-        <HeroVisual />
+        <FloatingPaths position={1} />
+        <FloatingPaths position={-1} />
       </div>
 
       {/* Top ambient glow */}
@@ -351,17 +200,16 @@ export function HeroSection() {
                 backgroundClip: "text",
               }}
             >
-              that scale with confidence
+              <TypewriterText
+                texts={[
+                  "that scale with confidence",
+                  "that drive real growth",
+                  "built for the future",
+                  "with zero compromise",
+                ]}
+              />
             </span>
           </motion.h1>
-
-          {/* ── Supporting paragraph ──────────── */}
-          <motion.p
-            variants={fadeUp}
-            className="text-[1.0625rem] md:text-[1.125rem] text-white/60 leading-[1.7] max-w-[42ch] mb-11"
-          >
-            AtoZee designs, engineers, and grows digital infrastructure — ERP systems, mobile apps, and SaaS platforms — with zero compromise on quality.
-          </motion.p>
 
           {/* ── CTA Buttons ───────────────────── */}
           <motion.div
@@ -386,21 +234,38 @@ export function HeroSection() {
         </motion.div>
       </Container>
 
-      {/* TrustStrip moved here - positioned higher with less vertical space */}
-      <div className="relative z-10 w-full mt-auto pb-8">
-        <div className="py-8">
+      {/* TrustStrip - AI Company Logos */}
+      <div className="relative z-10 w-full mt-auto pb-8 px-4">
+        <div className="py-10">
           <Container>
-            <p className="text-center text-[0.6875rem] font-semibold tracking-[0.18em] uppercase text-white/25 mb-6">
-              Trusted by forward-thinking teams
-            </p>
-            <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-4 md:gap-x-14">
-              {['Accenture', 'Deloitte', 'KPMG', 'Oracle', 'McKinsey', 'SAP'].map((name) => (
-                <div
-                  key={name}
-                  className="w-24 h-4 bg-white/[0.12] rounded-sm"
-                  style={{ maskImage: "linear-gradient(to bottom, white, white)" }}
-                />
-              ))}
+            <div className="rounded-[28px] border border-white/10 bg-white/[0.02] overflow-hidden">
+              <div className="px-8 pt-8 pb-2">
+                <p className="text-center text-[0.6875rem] font-semibold tracking-[0.18em] uppercase text-white/30 mb-0">
+                  Trusted by forward-thinking teams
+                </p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-10">
+                {aiLogos.map((logo, index) => (
+                  <div
+                    key={logo.name}
+                    className={`flex items-center justify-center min-h-[88px] border-r border-b border-white/10 bg-white/[0.01] hover:bg-white/[0.03] transition-colors ${
+                      (index + 1) % 5 === 0 ? 'border-r-0' : ''
+                    } ${index >= aiLogos.length - 5 ? 'border-b-0' : ''}`}
+                  >
+                    {logo.src ? (
+                      <img
+                        src={logo.src}
+                        alt={logo.name}
+                        className="h-6 w-auto invert opacity-70 hover:opacity-100 transition-opacity"
+                      />
+                    ) : (
+                      <span className="text-[0.8125rem] font-medium text-white/70 hover:text-white transition-colors duration-300 whitespace-nowrap">
+                        {logo.name}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </Container>
         </div>
