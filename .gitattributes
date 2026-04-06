@@ -1,0 +1,22 @@
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Files that need LF (Unix line endings)
+*.{js,jsx,ts,tsx,json,css,scss,md,html,xml,yml,yaml} text eol=lf
+
+# Shell scripts need LF
+*.sh text eol=lf
+
+# Make sure images are not converted
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+
+# Fonts
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary

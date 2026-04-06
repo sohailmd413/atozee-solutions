@@ -147,6 +147,7 @@ export const staggerContainerFast: Variants = {
  */
 export const viewportConfig = {
   once: true,
+  amount: 0.2 as const,
   margin: "-100px",
 };
 
@@ -156,6 +157,7 @@ export const viewportConfig = {
  */
 export const viewportEarly = {
   once: true,
+  amount: 0.1 as const,
   margin: "-150px",
 };
 
@@ -165,6 +167,7 @@ export const viewportEarly = {
  */
 export const viewportLate = {
   once: true,
+  amount: 0.3 as const,
   margin: "-50px",
 };
 
