@@ -1,3 +1,5 @@
+"use client";
+
 // components/ui/hero-4.tsx
 
 import * as React from "react";
